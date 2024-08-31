@@ -6,11 +6,23 @@ const port = 3000;
 
 let allPosts = [new Post(1, "First", "I`m tripping"), new Post(2, "Second", "I`m tired")];
 
+
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
+    console.log(allPosts);
     res.render('index.ejs', {posts: allPosts});
+})
+
+app.get('/create_post', (req, res) => {
+    res.render('create_post.ejs');
+})
+app.post('/create_post', (req, res) => {
+    let newId = getNewId();
+    let newPost = new Post(newId, req.body.title, req.body.content);
+    allPosts.push(newPost);
+    res.redirect('/');
 })
 
 app.listen(port, () => {
@@ -21,4 +33,9 @@ function Post(id, title, content) {
     this.id = id;
     this.title = title;
     this.content = content;
+}
+
+function getNewId() {
+    let lastId = allPosts[allPosts.length - 1].id;
+    return lastId + 1;
 }
