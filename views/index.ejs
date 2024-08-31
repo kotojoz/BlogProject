@@ -1,20 +1,18 @@
 <%- include("partials/header.ejs") %>
 <main>
     <div class="container my-5">
-        <% if(locals.posts){ %>
+        <% if(locals.posts.length != 0){ %>
             <% for(let i = 0; i < posts.length; i++){ %>
                 <div class="text-center border border-secondary p-5 my-4">
                     <div class="mt-3 text-end">
                         <!-- Button for PATCH action -->
-                        <form action="/update" method="get" class="d-inline">
+                        <form action="/update/<%= posts[i].id %>" method="get" class="d-inline">
                             <input type="hidden" name="_method" value="get">
-                            <input type="hidden" name="id" value="<%= posts[i].id %>">
                             <button type="submit" class="btn btn-warning">Update</button>
                         </form>
                         <!-- Button for DELETE action -->
-                        <form action="/delete" method="POST" class="d-inline">
+                        <form action="/delete/<%= posts[i].id %>" method="get" class="d-inline">
                             <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="id" value="<%= posts[i].id %>">
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </div>
@@ -22,6 +20,8 @@
                     <p class="lead"><strong><%= posts[i].content %></strong></p>
                 </div>
             <% } %>
+        <% } else { %>
+            <h1>No one posted yet!</h1>
         <% } %>
     </div>
 </main>

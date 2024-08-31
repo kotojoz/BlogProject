@@ -2,32 +2,48 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 const app = express();
-const port = 3000;
-
+const PORT = 3000;
 let allPosts = [new Post(1, "First", "I`m tripping"), new Post(2, "Second", "I`m tired")];
-
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
-    console.log(allPosts);
     res.render('index.ejs', {posts: allPosts});
-})
+});
 
 app.get('/create_post', (req, res) => {
     res.render('create_post.ejs');
-})
+});
+
 app.post('/create_post', (req, res) => {
-    let newId = getNewId();
-    let newPost = new Post(newId, req.body.title, req.body.content);
+    const newId = getNewId();
+    const newPost = new Post(newId, req.body.title, req.body.content);
     allPosts.push(newPost);
     res.redirect('/');
-})
+});
 
-app.listen(port, () => {
-    console.log(`Server running on port: ${port}`);
-})
+app.get('/update/:id', (req, res) => {
+    const post = findPostById(req.params.id);
+    res.render('update_post.ejs', {post: post});
+});
+
+app.post('/update', (req, res) => {
+    const post = findPostById(req.body.id);
+    post.title = req.body.title;
+    post.content = req.body.content;
+    res.redirect('/');
+});
+
+app.get('/delete/:id', (req, res) => {
+    const postId = Number(req.params.id);
+    allPosts = allPosts.filter(post => post.id !== postId);
+    res.redirect("/");
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on port: ${PORT}`);
+});
 
 function Post(id, title, content) {
     this.id = id;
@@ -35,7 +51,11 @@ function Post(id, title, content) {
     this.content = content;
 }
 
-function getNewId() {
-    let lastId = allPosts[allPosts.length - 1].id;
-    return lastId + 1;
-}
+const getNewId = () => {
+    return allPosts.length === 0 ? 1 : allPosts[allPosts.length - 1].id + 1;
+};
+
+const findPostById = (id) => {
+    const numericId = Number(id);
+    return allPosts.find(post => numericId === post.id);
+};

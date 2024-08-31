@@ -1,0 +1,22 @@
+<%- include("partials/header.ejs") %>
+
+<div class="container main">
+    <form action="/update" method="POST">
+        <input type="hidden" name="id" value="<%= post.id %>">
+        <div class="mb-3">
+            <label for="title" class="form-label">Post name</label>
+            <textarea class="form-control" id="title" name="title" rows="1"><%= post.title %></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">Text</label>
+            <textarea class="form-control" id="content" name="content" rows="3"><%= post.content %></textarea>
+        </div>
+        <div class="col-lg-6 col-xxl-4 my-5 mx-auto">
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<%- include("partials/footer.ejs") %>
