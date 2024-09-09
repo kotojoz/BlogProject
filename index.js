@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 
 const app = express();
 const PORT = 3000;
-let allPosts = [new Post(1, "First", "I`m tripping"), new Post(2, "Second", "I`m tired")];
+let allPosts = [];
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
